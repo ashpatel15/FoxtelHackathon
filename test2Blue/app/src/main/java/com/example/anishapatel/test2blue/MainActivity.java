@@ -68,15 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
                         if (recDataString.charAt(0) == '#')                                //if it starts with # we know it is what we are looking for
                         {
-                            String sensor0 = recDataString.substring(1, 5);             //get sensor value from string between indices 1-5
-                            String sensor1 = recDataString.substring(6, 10);            //same again...
-                            String sensor2 = recDataString.substring(11, 15);
-                            String sensor3 = recDataString.substring(16, 20);
-
+                            String sensor0 = recDataString.substring(1, 2);             //get sensor value from string between indices 1-5
+                            mConnectedThread.write(sensor0);
                             sensorView0.setText(" Sensor 0 Voltage = " + sensor0 + "V");    //update the textviews with sensor values
-                            sensorView1.setText(" Sensor 1 Voltage = " + sensor1 + "V");
-                            sensorView2.setText(" Sensor 2 Voltage = " + sensor2 + "V");
-                            sensorView3.setText(" Sensor 3 Voltage = " + sensor3 + "V");
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                         // strIncom =" ";
@@ -117,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        //Get MAC address from DeviceListActivity via intent
-        Intent intent = getIntent();
-
-        //Get the MAC address from the DeviceListActivty via EXTRA
-        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+//        //Get MAC address from DeviceListActivity via intent
+//        Intent intent = getIntent();
+//
+//        //Get the MAC address from the DeviceListActivty via EXTRA
+//        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 
         //create device and set the MAC address
         BluetoothDevice device = btAdapter.getRemoteDevice(address);
