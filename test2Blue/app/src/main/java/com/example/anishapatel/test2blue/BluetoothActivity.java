@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -19,7 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class BluetoothActivity extends AppCompatActivity {
 
     Button btnOn, btnOff;
     TextView txtArduino, txtString, txtStringLength, sensorView0, sensorView1, sensorView2, sensorView3;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_bluetooth);
 
         //Link the buttons and textViews to respective views
         btnOn = (Button) findViewById(R.id.buttonOn);
@@ -111,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-//        //Get MAC address from DeviceListActivity via intent
-//        Intent intent = getIntent();
-//
-//        //Get the MAC address from the DeviceListActivty via EXTRA
-//        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        //Get MAC address from DeviceListActivity via intent
+        Intent intent = getIntent();
+
+        //Get the MAC address from the DeviceListActivty via EXTRA
+        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 
         //create device and set the MAC address
         BluetoothDevice device = btAdapter.getRemoteDevice(address);
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
-
 
         public void run() {
             byte[] buffer = new byte[256];
