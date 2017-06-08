@@ -1,23 +1,6 @@
 #include <CapacitiveSensor.h>
- 
-int led = 13;
-//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-// Pins used for inputs and outputs********************************************************
-const int analogInPin0 = A0;// Analog input pins
-const int analogInPin1 = A1;
-const int analogInPin2 = A2;
-const int analogInPin3 = A3;
- 
-//Arrays for the 4 inputs**********************************************
-float sensorValue[4] = {0,0,0,0};
-float voltageValue[4] = {0,0,0,0};
- 
 //Char used for reading in Serial characters
 char inbyte = '0';
-float a = 0.0;
-float b = 2.0;
-float c = 3.0;
-float d = 4.0;
 //*******************************************************************************************
 // CapSense Vars 
 #define COMMON_PIN      2    // The common 'send' pin for all keys
@@ -43,7 +26,6 @@ boolean startBlink = false;
 boolean startBlink2 = false;
 
 void setup() {
-  // initialise serial communications at 9600 bps:
   Serial.begin(9600);
 
   //Setting up of CapSense 
@@ -58,15 +40,6 @@ void setup() {
 }
  
 void loop() {
-//
-//  Serial.print(keys[0].capacitiveSensor(NUM_OF_SAMPLES));
-//  Serial.print(" ");
-//  Serial.print(keys[1].capacitiveSensor(NUM_OF_SAMPLES));
-//Serial.println();
-// digitalWrite(ledPin[0], HIGH);
-//  digitalWrite(ledPin[1], HIGH);
-
-  
   for (int i = 0; i < NUM_OF_KEYS; ++i) {
 
     if (keys[i].capacitiveSensor(NUM_OF_SAMPLES) > thresh[i]){yes = true;}
@@ -78,7 +51,6 @@ void loop() {
          //This is is for LED PIN 6
          if(yes == true && previous  == false && millis() - time>debounce){
            //Put Send to Android in here
-           
             sendAndroidValues(0); 
             time = millis();                     
           }
@@ -88,7 +60,6 @@ void loop() {
         if(yes == true && previous  == false && millis() - time>debounce){
            //Put Send to Android in here 
            sendAndroidValues(1);
-
            time = millis();     
            
         }
@@ -103,7 +74,7 @@ void loop() {
   if (Serial.available() > 0){
     inbyte = Serial.read();
 
-    //Buy Main event
+    //Events from Touch sensor 1 and LED 1
     if (inbyte == '0'){
       //LED off
       startBlink = false;
@@ -115,16 +86,18 @@ void loop() {
     }
 
     if(inbyte == '2'){
+      //Success get API response from android 
       startBlink = false;
       digitalWrite(ledPin[0], HIGH);
     }
 
     if(inbyte == '6'){
+      //Failed get API response from android 
       startBlink = false;
       digitalWrite(ledPin[0], LOW);
     }
 
-    //Record program
+   //Events from Touch sensor 2 and LED 2
     if (inbyte == '3'){
       //LED off
       startBlink2 = false;
@@ -136,16 +109,19 @@ void loop() {
     }
 
     if(inbyte == '5'){
+      //Success get API response from android 
       startBlink2 = false;
       digitalWrite(ledPin[1], HIGH);
     }
 
     if(inbyte == '7'){
+      //Failed get API response from android 
       startBlink2 = false;
       digitalWrite(ledPin[1], LOW);
     }
 
     if(inbyte == '8'){
+      //Reset all LED's
       startBlink2 = false;
       digitalWrite(ledPin[0], LOW);
       digitalWrite(ledPin[1], LOW);
@@ -155,11 +131,12 @@ void loop() {
 
 
 
-  //If API call success
+  //Start LED 1 Flashing
   if(startBlink == true){
     makeBlink(0);
   }
-
+  
+  //Start LED 2 Flashing
   if(startBlink2 == true){
     makeBlink(1);
   }
@@ -184,7 +161,7 @@ void makeBlink (int pos){
           state[pos] = LOW;
         }
 
-    // set the LED with the ledState of the variable:
+      // set the LED with the ledState of the variable:
         digitalWrite(ledPin[pos], state[pos]);
       }
 }
